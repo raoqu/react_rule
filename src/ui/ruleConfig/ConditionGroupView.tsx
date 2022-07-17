@@ -38,7 +38,6 @@ export const ConditionGroupView: FC<ConditionGroupProps> = ({ groupId, condition
     () => ({
       accept: ItemTypes.RULE_CONDITION,
       drop(_item: Condition, monitor) {
-        console.log(_item)
         const didDrop = monitor.didDrop()
         if (didDrop) {
           return
@@ -46,7 +45,9 @@ export const ConditionGroupView: FC<ConditionGroupProps> = ({ groupId, condition
         setHasDropped(true)
         setHasDroppedOnChild(didDrop)
         setLastRuleName(_item.title)
-        addCondition(_item);
+        if( _item && _item.title) {
+          addCondition(_item);
+        }
       },
       collect: (monitor) => ({
         isOver: monitor.isOver(),
@@ -56,11 +57,10 @@ export const ConditionGroupView: FC<ConditionGroupProps> = ({ groupId, condition
   )
 
   const removeCurrentGroup = () => {
-    console.log('remove:' + groupId)
     removeGroup(groupId);
   }
 
-  const backgroundColor = (isOverCurrent || (isOver)) ? 'rgba(255, 255, 255)' : 'rgba(240, 240, 240)';
+  const backgroundColor = (isOverCurrent || (isOver)) ? 'rgba(255, 255, 230)' : 'rgba(230, 230, 230)';
 
   // condition item list
   const itemViews = items?.map((item) => {

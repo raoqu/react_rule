@@ -1,10 +1,9 @@
+
 import type { CSSProperties, FC, ReactNode } from 'react'
 import { useState } from 'react'
-import { StringPattern } from '../../util/StringPattern'
 
-import { ItemTypes } from '../ItemTypes'
-import { Condition, ConditionParam } from './model/Condition'
-import { RuleUtil } from './util/RuleUtil'
+import { Condition, ConditionParam, ConditionWidgetType, ParamValueLimitType } from './model/Condition'
+import { renderReadonly, renderWidgets } from './RuleWidgetRender'
 
 function getStyle(backgroundColor: string): CSSProperties {
   return {
@@ -17,37 +16,34 @@ export interface ConditionItemProp {
   condition: Condition
 }
 
-function renderReadonly(condition:Condition) {
-  const map = RuleUtil.getParamMap(condition.params);
-  const str = StringPattern.format(condition.pattern, map)
-  const backgroundColor = 'rgba(240, 240, 240)'
+type VoidFunction = () => void;
+type UpdateParamFunction = (paramKey:string, value?:string) => void;
 
-  return (
-    <div className='rule-condition-item' style={getStyle(backgroundColor)}>
-      {condition.title}
-      {/* {condition && StringPattern.format(condition.pattern, map)} */}
-    </div>
-  )
-}
-
-function renderWidgets(condition:Condition) {
-
-  return (
-    <div>
-    </div>
-  )
+function getParam(params:ConditionParam[], key:string): ConditionParam|undefined {
+  return params.find(param => (param.key == key)) || undefined;
 }
 
 export const ConditionItem: FC<ConditionItemProp> = (
-  { readonly = true, condition }) => 
-{
+  { readonly = false, condition }) => {
   const [isReadOnly, setReadOnly] = useState(readonly) // 只读模式 or 编辑模式
   const [params, setParams] = useState(condition.params) // 参数配置
 
-  if( readonly ) {
-    return renderReadonly(condition);
+  const switchMode = () => {
+    setReadOnly(!isReadOnly);
+  }
+
+  const updateValue = (paramKey:string,value?:string) => {
+    const param = condition.params && condition.params.find(param => (param.key == paramKey)) || undefined;
+    if( param ) {
+      param.value = value;
+      setParams(params);
+    }
+  }
+
+  if (isReadOnly) {
+    return renderReadonly(condition, switchMode);
   }
   else {
-    return renderWidgets(condition);
+    return renderWidgets(condition, switchMode, updateValue);
   }
 }

@@ -17,8 +17,6 @@ export default class RuleTree extends React.Component {
       return null
     }
     const treeNode = treeContent.map((value) => {
-      console.log('map');
-      console.log(value)
       if (value.id === 'all') {
         return (
           <Tree.TreeNode title={<RuleTreeItem title={value.title}  id={value.id} condition={value.condition}/>} key={value.id}>

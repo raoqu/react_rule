@@ -7,7 +7,6 @@ import { RuleValue } from './model/RuleData'
 
 
 export const RuleTreeItem: React.FC<RuleValue> = ({title, id, condition}) => {
-  console.log('item:' + title + ',' + id)
   const [{ isDragging }, drag] = useDrag(
     () => ({
       type: ItemTypes.RULE_CONDITION,

@@ -1,10 +1,35 @@
-import { Condition } from "./Condition";
+import { Condition, ConditionParam, ConditionWidgetType, ParamValueLimitType } from "./Condition";
 
 export interface RuleValue {
   title?: string,
   id?: string,
   condition?: Condition
 }
+
+const VoucherTypeParams: ConditionParam[] = [
+  {
+    key: 'targetType',
+    value: undefined,
+    widgetType: ConditionWidgetType.MULTI_SELECT,
+    valueLimit: {
+      type: ParamValueLimitType.SELECT,
+      limit: '券类型1,VOUCHER_TYPE_1|券类型2,VOUCHER_TYPE_2|券类型3,VOUCHER_TYPE_3'
+    }
+  }
+]
+
+const VoucherDiscountParams: ConditionParam[] = [
+  {
+    key: 'compareType',
+    value: undefined,
+    widgetType: ConditionWidgetType.SELECT,
+  },
+  {
+    key: 'discount',
+    value: undefined,
+    widgetType: ConditionWidgetType.NUMBER,
+  }
+]
 
 export const RULE_DATA = [
   {
@@ -17,11 +42,13 @@ export const RULE_DATA = [
         type: 'node',
         children: [
           {
-            title: '券类型',
+            title: '优惠券类型',
             id: 'folder1-1',
             condition: {
               title: '券类型',
-              id: 'voucherType'
+              id: 'voucherType',
+              pattern: '优惠券类型 属于 #{targetType} ',
+              params: VoucherTypeParams
             }
           },
           {
@@ -29,7 +56,9 @@ export const RULE_DATA = [
             id: 'folder1-2',
             condition: {
               title: '优惠折扣',
-              id: 'voucherDiscount'
+              id: 'voucherDiscount',
+              pattern: '优惠折扣力度 #{compareType} #{discount} 折 ',
+              params: VoucherDiscountParams
             }
           },
           {
