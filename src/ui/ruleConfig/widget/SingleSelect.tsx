@@ -19,7 +19,7 @@ function makeMap(str:string, map: Map<string,string>): string[] {
     return arr
 }
 
-export const MultiSelect: FC<MultiSelectProps> = ({key, param}) => {
+export const SingleSelect: FC<MultiSelectProps> = ({key, param}) => {
     const map = new Map<string,string>()
     const list = makeMap(param.valueLimit?.limit || '', map);
     
@@ -31,6 +31,6 @@ export const MultiSelect: FC<MultiSelectProps> = ({key, param}) => {
     })
     
     return (
-        <Select key={key} mode="multiple" style={{minWidth:'150px'}}>{children}</Select>
+        <Select key={key} style={{minWidth:'150px'}}>{children}</Select>
     )
 }

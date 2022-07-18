@@ -2,7 +2,7 @@
 export enum ConditionWidgetType {
     TEXT = 'TEXT',
     NUMBER = 'NUMBER',
-    SELECT = 'ENUM',
+    SELECT = 'SELECT',
     MULTI_SELECT = 'MULTI_SELECT',
     CUSTOMIZE = 'CUSTOMIZE'
 }

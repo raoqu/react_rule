@@ -23,11 +23,35 @@ const VoucherDiscountParams: ConditionParam[] = [
     key: 'compareType',
     value: undefined,
     widgetType: ConditionWidgetType.SELECT,
+    valueLimit: {
+      type: ParamValueLimitType.SELECT,
+      limit: '大于,GREATER_THAN|大于等于,GREATER_OR_EQUAL'
+    }
   },
   {
     key: 'discount',
     value: undefined,
-    widgetType: ConditionWidgetType.NUMBER,
+    widgetType: ConditionWidgetType.NUMBER
+  }
+]
+
+const VoucherUseSceneParams: ConditionParam[] = [
+  {
+    key: 'useScene',
+    value: undefined,
+    widgetType: ConditionWidgetType.SELECT,
+    valueLimit: {
+      type: ParamValueLimitType.SELECT,
+      limit: '全场通用,USE_SCENE_1|指定商品可用,USE_SCENE_2'
+    }
+  }
+]
+
+const StrangeParams: ConditionParam[] = [
+  {
+    key: 'strange',
+    value: undefined,
+    widgetType: ConditionWidgetType.CUSTOMIZE
   }
 ]
 
@@ -66,7 +90,19 @@ export const RULE_DATA = [
             id: 'folder1-3',
             condition: {
               title: '优惠范围',
-              id: 'useScene'
+              id: 'useScene',
+              pattern: '优惠使用范围限制 #{useScene}',
+              params: VoucherUseSceneParams
+            }
+          },
+          {
+            title: '未实现组件的规则',
+            id: 'folder1-4',
+            condition: {
+              title: '未实现组件的规则',
+              id: 'strange',
+              pattern: '这是一个组件 #{strange} 未实现的例子',
+              params: StrangeParams
             }
           }
         ],

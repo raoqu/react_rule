@@ -4,6 +4,7 @@ import { PatternTokenType, StringPattern } from "../../util/StringPattern";
 import { Condition, ConditionParam, ConditionWidgetType } from "./model/Condition"
 import { RuleUtil } from "./util/RuleUtil";
 import { MultiSelect } from "./widget/MultiSelect";
+import { SingleSelect } from "./widget/SingleSelect";
 
 
 type VoidFunction = () => void;
@@ -24,6 +25,10 @@ export function renderSingleWidget(param: ConditionParam, key: string, updateVal
 
     if( param.widgetType == ConditionWidgetType.MULTI_SELECT) {
         return (<MultiSelect key={key} param={param}/>)
+    }
+
+    if( param.widgetType == ConditionWidgetType.SELECT) {
+        return (<SingleSelect key={key} param={param}/>)
     }
 
     return (
