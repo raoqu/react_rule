@@ -32,7 +32,7 @@ export interface ConditionParam {
 
 // 条件配置
 export class Condition {
-    public uniqId: string;
+    public uniqueId: string;
     public id: string;
     public title: string;
     public pattern: string;             // '券优惠折扣 #{operator} #{discount} 折'

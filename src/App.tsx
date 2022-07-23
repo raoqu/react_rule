@@ -6,7 +6,7 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import './App.css';
 import Example from './ui/dragExample/Example';
 import { RuleContainer } from './ui/ruleConfig/RuleContainer';
-import { uniqueId } from 'lodash';
+import _ from 'lodash';
 
 function App() {
   return (
@@ -17,7 +17,7 @@ function App() {
             <RuleTree name="hahaha" />
           </Col>
           <Col span={18}>
-            <RuleContainer id={uniqueId()} />
+            <RuleContainer ruleId={_.uniqueId()} />
           </Col>
         </Row>
         {/* <div>

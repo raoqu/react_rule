@@ -3,16 +3,19 @@ import _ from 'lodash'
 import type { CSSProperties, FC, ReactNode } from 'react'
 import { useState } from 'react'
 import { useDrop } from 'react-dnd'
+import { GlobalContext } from '../../util/GlobalContext'
 
 import { ItemTypes } from '../ItemTypes'
 import { ConditionItem } from './ConditionItem'
-import { Condition, ConditionGroup } from './model/Condition'
+import { Condition } from './model/Condition'
+import { RuleUtil } from './util/RuleUtil'
 
 type RemoveGroupFunction = (id: string) => void;
 
 interface ConditionGroupProps {
-  groupId: string,
-  conditions?: Condition[],
+  ruleId: string
+  groupId: string
+  groupCount: number
   removeGroup: RemoveGroupFunction
 }
 
@@ -22,17 +25,11 @@ function getStyle(backgroundColor: string): CSSProperties {
   }
 }
 
-export const ConditionGroupView: FC<ConditionGroupProps> = ({ groupId, conditions = [], removeGroup }) => {
-  const [rules, setRules] = useState([])
-  const [hasDropped, setHasDropped] = useState(false)
-  const [hasDroppedOnChild, setHasDroppedOnChild] = useState(false)
-  const [lastRuleName, setLastRuleName] = useState('')
-  const [items, setItems] = useState(conditions);
-
-  const addCondition = (condition: Condition) => {
-    items.push(condition);
-    setItems(items)
-  }
+export const ConditionGroupView: FC<ConditionGroupProps> = ({ ruleId, groupId, groupCount, removeGroup }) => {
+  const context = GlobalContext.get(ruleId)
+  console.log(groupCount)
+  const group = GlobalContext.getField(context, "group_" + groupId)
+  const [conditionCount, setConditionCount] = useState(group.conditionIds.length)
 
   const [{ isOver, isOverCurrent }, drop] = useDrop(
     () => ({
@@ -42,11 +39,10 @@ export const ConditionGroupView: FC<ConditionGroupProps> = ({ groupId, condition
         if (didDrop) {
           return
         }
-        setHasDropped(true)
-        setHasDroppedOnChild(didDrop)
-        setLastRuleName(_item.title)
-        if( _item && _item.title) {
-          addCondition(_item);
+        // add new condition
+        if (_item && _item.title) {
+          RuleUtil.addNewCondition(ruleId, groupId, _item)
+          setConditionCount(group.conditionIds.length)
         }
       },
       collect: (monitor) => ({
@@ -63,21 +59,18 @@ export const ConditionGroupView: FC<ConditionGroupProps> = ({ groupId, condition
   const backgroundColor = (isOverCurrent || (isOver)) ? 'rgba(255, 255, 230)' : 'rgba(230, 230, 230)';
 
   // condition item list
-  const itemViews = items?.map((item) => {
-    const unique = _.uniqueId();
+  const itemViews = group.conditionIds.map((conditionId: string) => {
     return (
-      <ConditionItem key={unique} condition={item} />
+      <ConditionItem key={conditionId}
+        ruleId={ruleId} groupId={groupId} conditionId={conditionId} conditionCount={conditionCount} />
     )
   })
-
 
   return (
     <div ref={drop} className='rule-condition-group' style={getStyle(backgroundColor)}>
       <Row>
         <Col flex="20px"></Col>
         <Col flex="auto">
-          {/* {groupId}
-          {hasDropped && <span>{lastRuleName}</span>} */}
           <div>
             {itemViews}
           </div>

@@ -4,13 +4,14 @@ import { FolderOpenOutlined } from '@ant-design/icons'
 import { DragSourceMonitor, useDrag } from 'react-dnd'
 import { ItemTypes } from '../ItemTypes'
 import { RuleValue } from './model/RuleData'
+import _ from 'lodash'
 
 
 export const RuleTreeItem: React.FC<RuleValue> = ({title, id, condition}) => {
   const [{ isDragging }, drag] = useDrag(
     () => ({
       type: ItemTypes.RULE_CONDITION,
-      item: condition,
+      item: _.cloneDeep(condition),
       collect: (monitor: DragSourceMonitor) => ({
         isDragging: monitor.isDragging(),
       })

@@ -28,7 +28,7 @@ export class StringPattern {
         let str = ''
         tokens && tokens.map((token) => {
             let val = token.value || '';
-            if( token.type == PatternTokenType.PARAM ) {
+            if( token.type === PatternTokenType.PARAM ) {
                 val = (params && params.get(val)) || '$';
             }
             str = str + val;

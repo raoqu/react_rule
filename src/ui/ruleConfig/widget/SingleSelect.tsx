@@ -1,12 +1,17 @@
 import { Select } from 'antd';
-import {FC} from 'react'
+import {FC, useEffect, useState} from 'react'
 import { ConditionParam } from '../model/Condition'
 const { Option } = Select;
 
 interface MultiSelectProps {
-    key:string;
-    param:ConditionParam;
+    uniqueId:string
+    param:ConditionParam
+    onChange: OnChangeFunction
 }
+
+type OnChangeFunction = (value:string) => void
+
+const defaultOnChange = (value:string) => {}
 
 function makeMap(str:string, map: Map<string,string>): string[] {
     let arr: string[] = []
@@ -19,18 +24,29 @@ function makeMap(str:string, map: Map<string,string>): string[] {
     return arr
 }
 
-export const SingleSelect: FC<MultiSelectProps> = ({key, param}) => {
+export const SingleSelect: FC<MultiSelectProps> = ({uniqueId, param, onChange=defaultOnChange}) => {
     const map = new Map<string,string>()
     const list = makeMap(param.valueLimit?.limit || '', map);
+    const val = param.value
+    const [value, setValue] = useState(val)
+    
+    useEffect(()=>{
+        setTimeout(()=> {setValue(val)}, 1)
+    })
     
     const children: React.ReactNode[] = [];
     let index = 0;
-    list.map((item) => {
+    list.map((code) => {
         index = index + 1;
-        children.push(<Option key={''+index}>{map.get(item)}</Option>);
+        children.push(<Option key={''+index} value={code}>{map.get(code)}</Option>);
     })
+
+    const handleChange = (value:string) => {
+        console.log('select change ' + uniqueId + ' :' + value)
+        onChange(value)
+    }
     
     return (
-        <Select key={key} style={{minWidth:'150px'}}>{children}</Select>
+        <Select key={uniqueId} style={{minWidth:'150px'}} onChange={handleChange} value={value}>{children}</Select>
     )
 }
