@@ -1,5 +1,5 @@
 
-import { CaretDownOutlined, CaretRightOutlined, FolderOpenOutlined, FolderOutlined } from '@ant-design/icons'
+import { CaretDownOutlined, CaretRightOutlined, DownCircleOutlined, FolderOpenOutlined, FolderOutlined, RightOutlined } from '@ant-design/icons'
 import { Button, Tag } from 'antd'
 import _ from 'lodash'
 import { CSSProperties, FC, useEffect } from 'react'
@@ -29,11 +29,9 @@ export const ConditionItem: FC<ConditionItemProp> = (
 
   const context = GlobalContext.get(ruleId)
   const condition = GlobalContext.getField(context, "condition_" + conditionId) as Condition
-  const [isReadOnly, setReadOnly] = useState(readonly) // 只读模式 or 编辑模式
   const [params, setParams] = useState(condition.params) // 参数配置
 
   const switchMode = () => {
-    setReadOnly(!isReadOnly);
   }
 
   const updateValue = (paramKey:string,value?:string) => {
@@ -41,16 +39,14 @@ export const ConditionItem: FC<ConditionItemProp> = (
     if( param ) {
       param.value = value;
       setParams(params);
-      
-      console.log('param updated:' + conditionId + ' ' + paramKey + ' - ' + value)
     }
   }
 
-  const views = isReadOnly ? renderReadonly(condition, switchMode) : renderWidgets(condition, switchMode, updateValue);
-  const backgroundColor = isReadOnly ? 'rgba(240, 240, 240)' : 'rgba(240, 255, 255)';
+  const views = readonly ? renderReadonly(condition, switchMode) : renderWidgets(condition, switchMode, updateValue);
+  const backgroundColor = readonly ? 'rgba(240, 240, 240)' : 'rgba(250, 250, 250)';
   return (
       <div className='rule-condition-item' style={getStyle(backgroundColor)}>
-        { isReadOnly ?  <CaretRightOutlined  onClick={ switchMode } /> : <CaretDownOutlined  onClick={ switchMode } />}
+        { readonly ?  <CaretRightOutlined  onClick={ switchMode } /> :<RightOutlined />}
           &nbsp;{views}
       </div>
   )

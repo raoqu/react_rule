@@ -1,14 +1,15 @@
-import { Button, Col, Layout, Row } from 'antd';
+import { Button, Col, Layout, Row, Switch } from 'antd';
 import RuleTree from './ui/ruleConfig/RuleTree'
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
 import './App.css';
-import Example from './ui/dragExample/Example';
 import { RuleContainer } from './ui/ruleConfig/RuleContainer';
 import _ from 'lodash';
+import { useState } from 'react';
 
 function App() {
+
   return (
     <div className="App">
       <DndProvider backend={HTML5Backend}>
@@ -17,7 +18,7 @@ function App() {
             <RuleTree name="hahaha" />
           </Col>
           <Col span={18}>
-            <RuleContainer ruleId={_.uniqueId()} />
+            <RuleContainer ruleId={_.uniqueId()}/>
           </Col>
         </Row>
         {/* <div>

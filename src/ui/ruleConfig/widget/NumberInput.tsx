@@ -23,7 +23,6 @@ export const NumberInput: FC<InputNumberProps> = ({uniqueId, param, onChange=def
     })
 
     const handleChange = (value:string) => {
-        console.log('select change ' + uniqueId + ' :' + value)
         onChange(value)
     }
     

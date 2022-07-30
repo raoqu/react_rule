@@ -42,7 +42,6 @@ export const SingleSelect: FC<MultiSelectProps> = ({uniqueId, param, onChange=de
     })
 
     const handleChange = (value:string) => {
-        console.log('select change ' + uniqueId + ' :' + value)
         onChange(value)
     }
     

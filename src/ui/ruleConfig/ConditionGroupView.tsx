@@ -1,3 +1,4 @@
+import { DeleteOutlined, FolderOpenOutlined } from '@ant-design/icons'
 import { Button, Col, Row } from 'antd'
 import _ from 'lodash'
 import type { CSSProperties, FC, ReactNode } from 'react'
@@ -16,7 +17,9 @@ interface ConditionGroupProps {
   ruleId: string
   groupId: string
   groupCount: number
+  enableRemove?: boolean
   removeGroup: RemoveGroupFunction
+  designMode: boolean
 }
 
 function getStyle(backgroundColor: string): CSSProperties {
@@ -25,9 +28,10 @@ function getStyle(backgroundColor: string): CSSProperties {
   }
 }
 
-export const ConditionGroupView: FC<ConditionGroupProps> = ({ ruleId, groupId, groupCount, removeGroup }) => {
+export const ConditionGroupView: FC<ConditionGroupProps> = (
+  { ruleId, groupId, groupCount,enableRemove = true, designMode = true,removeGroup }) => {
+
   const context = GlobalContext.get(ruleId)
-  console.log(groupCount)
   const group = GlobalContext.getField(context, "group_" + groupId)
   const [conditionCount, setConditionCount] = useState(group.conditionIds.length)
 
@@ -56,13 +60,13 @@ export const ConditionGroupView: FC<ConditionGroupProps> = ({ ruleId, groupId, g
     removeGroup(groupId);
   }
 
-  const backgroundColor = (isOverCurrent || (isOver)) ? 'rgba(255, 255, 230)' : 'rgba(230, 230, 230)';
+  const backgroundColor = (isOverCurrent || (isOver)) ? 'rgba(250, 250, 250)' : 'rgba(240, 240, 240)';
 
   // condition item list
   const itemViews = group.conditionIds.map((conditionId: string) => {
     return (
       <ConditionItem key={conditionId}
-        ruleId={ruleId} groupId={groupId} conditionId={conditionId} conditionCount={conditionCount} />
+        ruleId={ruleId} groupId={groupId} conditionId={conditionId} conditionCount={conditionCount} readonly={!designMode}/>
     )
   })
 
@@ -75,9 +79,10 @@ export const ConditionGroupView: FC<ConditionGroupProps> = ({ ruleId, groupId, g
             {itemViews}
           </div>
         </Col>
-        <Col flex="20px">
-          <Button onClick={removeCurrentGroup}>删除</Button>
-        </Col>
+        { enableRemove &&
+          <Col flex="12px">
+            <Button onClick={removeCurrentGroup}><DeleteOutlined /></Button>
+          </Col>}
       </Row>
     </div>
   )
